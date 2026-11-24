@@ -8,6 +8,7 @@ import { IaqHacksSection } from './components/IaqHacksSection';
 import { ImpactSimulator } from './components/ImpactSimulator';
 import { SmogAssistantChat } from './components/SmogAssistantChat';
 import { MicroLocationNavigator } from './components/MicroLocationNavigator';
+import { CadrSizingCalculator } from './components/CadrSizingCalculator';
 import { 
   CityAirData, 
   HouseholdProfile, 
@@ -15,7 +16,7 @@ import {
   ImpactEstimation, 
   MicroLocationAQI,
   Coordinates
-} from '../types';
+} from './types';
 import { 
   fetchLocationAirIntelligence, 
   fetchAirIntelligenceByCoordinates,
@@ -59,7 +60,7 @@ export const App: React.FC = () => {
   });
 
   // Active Tab state for navigation
-  const [activeTab, setActiveTab] = useState<'microlocations' | 'schedule' | 'iaq' | 'impact' | 'assistant'>('microlocations');
+  const [activeTab, setActiveTab] = useState<'microlocations' | 'cadr' | 'schedule' | 'iaq' | 'impact' | 'assistant'>('cadr');
 
   // Load air intelligence by city name
   const loadCityData = useCallback(async (cityName: string) => {
@@ -203,6 +204,7 @@ export const App: React.FC = () => {
         {/* Tab Navigation for Deep Exploration */}
         <div className="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto">
           {[
+            { id: 'cadr', label: '💨 CADR & Room Air Sizer' },
             { id: 'microlocations', label: '🌿 Micro-AQI & Sanctuaries' },
             { id: 'schedule', label: '24h Smog Routine' },
             { id: 'iaq', label: 'Indoor Air Quality Hacks' },
@@ -227,6 +229,10 @@ export const App: React.FC = () => {
         </div>
 
         {/* Dynamic Tab Views */}
+        {activeTab === 'cadr' && (
+          <CadrSizingCalculator currentCityAir={airData} />
+        )}
+
         {activeTab === 'microlocations' && (
           <MicroLocationNavigator
             locations={microLocations}
@@ -267,7 +273,7 @@ export const App: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="font-semibold text-slate-400">AuraGuard</span>
             <span>•</span>
-            <span>Accurate GPS Micro-Climate & Urban Smog Navigator</span>
+            <span>Accurate GPS Micro-Climate, Room CADR Sizer & Urban Smog Navigator</span>
           </div>
           <p className="text-center sm:text-right text-[11px] text-slate-400">
             Powered by Gemini with Search Grounding & Geolocation • Educational & Preventive Protection.
