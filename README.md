@@ -1,6 +1,6 @@
 # Deployed link:
 
-[Real time AQI and suggestions](https://genai-app-auraguardwintersmogcleana-1-17955205781-555371502170.asia-south1.run.app/?key=gBVd9Q8vBkieErItumynPxoIJsU5It10)
+[Real time AQI and suggestions](https://genai-app-auraguardwintersmogcleana-1-17955205781-555371502170.asia-south1.run.app/?key=gBVd9Q8vBkieErItumynPxoIJsU5It10){:target="_blank"}
 
 
 
@@ -57,3 +57,5 @@ To install dependencies and run your Google Cloud Vertex AI Studio App locally, 
 
 ```bash
 npm install && npm run dev
+
+```
