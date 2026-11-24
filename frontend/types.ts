@@ -118,3 +118,48 @@ export interface AssistantMessage {
   timestamp: string;
   groundingSources?: GroundingSource[];
 }
+
+export type RoomType = 'bedroom' | 'nursery' | 'living' | 'office' | 'kitchen';
+
+export interface RoomPreset {
+  id: RoomType;
+  name: string;
+  defaultLengthFt: number;
+  defaultWidthFt: number;
+  defaultCeilingFt: number;
+  targetAch: number; // Air changes per hour recommended
+  priorityNote: string;
+}
+
+export type PurifierCategory = 'diy_box_fan' | 'commercial_hepa' | 'custom';
+
+export interface PurifierOption {
+  id: string;
+  name: string;
+  category: PurifierCategory;
+  cadrCfm: number; // Clean Air Delivery Rate in Cubic Feet per Minute
+  noiseDba: string;
+  costEstimate: string;
+  powerWatts: number;
+  description: string;
+}
+
+export interface ScrubbingDataPoint {
+  minute: number;
+  pm25: number;
+  safeLimit: number;
+}
+
+export interface CadrCalculationResult {
+  roomVolumeCuFt: number;
+  roomVolumeCuM: number;
+  achDelivered: number;
+  achTarget: number;
+  isAdequate: boolean;
+  cleanAirDeficitCfm: number;
+  minutesToSafeLevel: number; // Time to drop PM2.5 below WHO threshold (15 ug/m3)
+  minutesTo90PercentClearance: number;
+  decayTimeline: ScrubbingDataPoint[];
+  verdict: 'Optimal Clean Sanctuary' | 'Adequate Defense' | 'Underpowered for Smog';
+  actionableRecommendation: string;
+}
