@@ -1,6 +1,6 @@
 # Deployed link:
 
-
+[Real time AQI and suggestions](https://genai-app-auraguardwintersmogcleana-1-17955205781-555371502170.asia-south1.run.app/?key=gBVd9Q8vBkieErItumynPxoIJsU5It10)
 
 
 
