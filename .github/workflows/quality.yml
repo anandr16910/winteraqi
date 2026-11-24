@@ -1,0 +1,54 @@
+name: Quality checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend-build:
+    name: Frontend production build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Temporary bootstrap: this repository does not yet contain a lockfile.
+      # Replace npm install with npm ci after dependency versions are pinned
+      # and committed lockfiles are added.
+      - name: Install frontend dependencies
+        run: npm install --no-audit --no-fund --no-package-lock
+
+      - name: Build frontend
+        run: npm run build
+
+  backend-syntax:
+    name: Backend JavaScript syntax
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check server syntax
+        run: node --check server.js
