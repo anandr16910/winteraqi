@@ -13,7 +13,8 @@ import {
   Users, 
   Search, 
   Wrench,
-  CheckCircle2
+  CheckCircle2,
+  Wind
 } from 'lucide-react';
 
 interface FeaturesModalProps {
@@ -25,6 +26,13 @@ export const FeaturesModal: React.FC<FeaturesModalProps> = ({ isOpen, onClose })
   if (!isOpen) return null;
 
   const features = [
+    {
+      icon: Wind,
+      color: 'text-emerald-400 bg-emerald-950/80 border-emerald-800',
+      badge: 'NEW Sizing Tool',
+      title: 'Room-by-Room CADR & ACH Sizer',
+      description: 'Calculates required Air Changes per Hour (ACH) for DIY Corsi-Rosenthal boxes vs commercial HEPA purifiers based on exact room dimensions and ceiling heights, plotting clearance curves to WHO safe levels (<15 µg/m³).'
+    },
     {
       icon: Crosshair,
       color: 'text-emerald-400 bg-emerald-950/80 border-emerald-800',
@@ -73,13 +81,6 @@ export const FeaturesModal: React.FC<FeaturesModalProps> = ({ isOpen, onClose })
       badge: 'Quantified Impact',
       title: 'Exposure & Health Impact Simulator',
       description: 'Interactive Recharts visualization calculating daily inhaled PM2.5 avoided (µg/day), local CO2 prevented (kg), and percentage reduction in acute respiratory risks.'
-    },
-    {
-      icon: Bot,
-      color: 'text-teal-400 bg-teal-950/80 border-teal-800',
-      badge: 'Gemini 2.5 Flash',
-      title: 'AI Smog Doctor & Search Grounding',
-      description: 'Conversational assistant with multi-turn memory, answering hyper-local questions, evaluating mask fits, and citing verified live web sources via Google Search Grounding.'
     }
   ];
 
