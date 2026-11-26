@@ -11,6 +11,7 @@ import fetch from 'node-fetch';
 import rateLimit from 'express-rate-limit';
 import { WebSocketServer, WebSocket } from 'ws';
 
+
 const app = express();
 app.use(express.json({limit: process?.env?.API_PAYLOAD_MAX_SIZE || "7mb"}));
 
@@ -652,6 +653,7 @@ server.on('upgrade', async (request, socket, head) => {
     // Path did not match
     socket.destroy();
   }
+
 });
 
-
+export { app };  
