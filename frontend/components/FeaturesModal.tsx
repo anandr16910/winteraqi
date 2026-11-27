@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { 
   X, 
   Crosshair, 
@@ -23,6 +23,15 @@ interface FeaturesModalProps {
 }
 
 export const FeaturesModal: React.FC<FeaturesModalProps> = ({ isOpen, onClose }) => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const features = [
@@ -85,28 +94,35 @@ export const FeaturesModal: React.FC<FeaturesModalProps> = ({ isOpen, onClose })
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="features-modal-title"
+    >
       <div className="relative w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-400">
+            <div className="w-9 h-9 rounded-xl bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-400" aria-hidden="true">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <h2 id="features-modal-title" className="text-lg font-bold text-slate-100 flex items-center gap-2">
                 AuraGuard Core Features & Guide
-              </h3>
+              </h2>
               <p className="text-xs text-slate-400">
                 GenAI atmospheric intelligence designed for severe winter smog and urban clean air resilience
               </p>
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
+            aria-label="Close features guide dialog"
             className="p-1.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 
@@ -124,13 +140,13 @@ export const FeaturesModal: React.FC<FeaturesModalProps> = ({ isOpen, onClose })
                     <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-slate-900 text-emerald-300 border border-slate-800">
                       {feat.badge}
                     </span>
-                    <div className={`w-7 h-7 rounded-lg border flex items-center justify-center ${feat.color}`}>
+                    <div className={`w-7 h-7 rounded-lg border flex items-center justify-center ${feat.color}`} aria-hidden="true">
                       <Icon className="w-3.5 h-3.5" />
                     </div>
                   </div>
-                  <h4 className="text-sm font-bold text-slate-100 mb-1">
+                  <h3 className="text-sm font-bold text-slate-100 mb-1">
                     {feat.title}
-                  </h4>
+                  </h3>
                   <p className="text-xs text-slate-300 leading-relaxed">
                     {feat.description}
                   </p>
@@ -143,12 +159,13 @@ export const FeaturesModal: React.FC<FeaturesModalProps> = ({ isOpen, onClose })
         {/* Bottom Callout */}
         <div className="bg-emerald-950/30 border border-emerald-800/60 rounded-2xl p-4 text-xs text-emerald-200/90 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" aria-hidden="true" />
             <span>
               All data is continuously updated through <strong>Gemini 2.5 Flash</strong> with real-time <strong>Google Search Grounding</strong>.
             </span>
           </div>
           <button
+            type="button"
             onClick={onClose}
             className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs shadow-md shadow-emerald-950 whitespace-nowrap transition-all"
           >

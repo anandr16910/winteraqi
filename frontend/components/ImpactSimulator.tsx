@@ -31,16 +31,16 @@ export const ImpactSimulator: React.FC<ImpactSimulatorProps> = ({ impact, airDat
   ];
 
   return (
-    <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl">
+    <section aria-labelledby="impact-simulator-heading" className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/80">
+            <span className="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/80" aria-hidden="true">
               <TrendingDown className="w-4 h-4" />
             </span>
-            <h3 className="text-lg font-bold text-slate-100">
+            <h2 id="impact-simulator-heading" className="text-lg font-bold text-slate-100">
               Direct Health & Community Emission Impact
-            </h3>
+            </h2>
           </div>
           <p className="text-xs text-slate-400 mt-1">
             Quantifiable biological exposure prevention and carbon/particulate reductions achieved by your household.
@@ -52,7 +52,7 @@ export const ImpactSimulator: React.FC<ImpactSimulatorProps> = ({ impact, airDat
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-4">
           <span className="text-xs font-medium text-slate-400 flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
             Inhaled PM2.5 Avoided
           </span>
           <div className="mt-2 flex items-baseline gap-1.5">
@@ -68,7 +68,7 @@ export const ImpactSimulator: React.FC<ImpactSimulatorProps> = ({ impact, airDat
 
         <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-4">
           <span className="text-xs font-medium text-slate-400 flex items-center gap-1.5">
-            <Leaf className="w-3.5 h-3.5 text-teal-400" />
+            <Leaf className="w-3.5 h-3.5 text-teal-400" aria-hidden="true" />
             Local CO2 Prevented
           </span>
           <div className="mt-2 flex items-baseline gap-1.5">
@@ -84,7 +84,7 @@ export const ImpactSimulator: React.FC<ImpactSimulatorProps> = ({ impact, airDat
 
         <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-4">
           <span className="text-xs font-medium text-slate-400 flex items-center gap-1.5">
-            <Award className="w-3.5 h-3.5 text-cyan-400" />
+            <Award className="w-3.5 h-3.5 text-cyan-400" aria-hidden="true" />
             Respiratory Risk Cut
           </span>
           <div className="mt-2 flex items-baseline gap-1.5">
@@ -100,7 +100,7 @@ export const ImpactSimulator: React.FC<ImpactSimulatorProps> = ({ impact, airDat
 
         <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-4">
           <span className="text-xs font-medium text-slate-400 flex items-center gap-1.5">
-            <Users className="w-3.5 h-3.5 text-purple-400" />
+            <Users className="w-3.5 h-3.5 text-purple-400" aria-hidden="true" />
             Community Multiplier
           </span>
           <div className="mt-2 flex items-baseline gap-1.5">
@@ -119,30 +119,34 @@ export const ImpactSimulator: React.FC<ImpactSimulatorProps> = ({ impact, airDat
       <div className="bg-slate-950/80 border border-slate-800 rounded-2xl p-5 mb-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div>
-            <h4 className="text-sm font-semibold text-slate-200">
+            <h3 className="text-sm font-semibold text-slate-200">
               24-Hour Micro-Particulate (PM2.5) Exposure Curve
-            </h4>
+            </h3>
             <p className="text-xs text-slate-400">
               Comparing ambient street smog vs unsealed home vs AuraGuard protected sanctuary.
             </p>
           </div>
           <div className="flex items-center gap-3 text-xs">
             <span className="flex items-center gap-1 text-rose-400">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" aria-hidden="true" />
               Outdoor Street
             </span>
             <span className="flex items-center gap-1 text-amber-400">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" aria-hidden="true" />
               Unsealed Home
             </span>
             <span className="flex items-center gap-1 text-emerald-400">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true" />
               AuraGuard Home
             </span>
           </div>
         </div>
 
-        <div className="h-64 w-full">
+        <div
+          className="h-64 w-full"
+          role="img"
+          aria-label={`24-hour PM2.5 exposure comparison chart in ${airData.city} showing AuraGuard protected home keeping indoor PM2.5 between 12 and 22 micrograms per cubic meter compared to higher outdoor and unsealed home peaks.`}
+        >
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={diurnalData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
@@ -160,8 +164,8 @@ export const ImpactSimulator: React.FC<ImpactSimulatorProps> = ({ impact, airDat
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-              <XAxis dataKey="time" stroke="#64748b" tick={{ fontSize: 11 }} />
-              <YAxis stroke="#64748b" tick={{ fontSize: 11 }} unit="µg" />
+              <XAxis dataKey="time" stroke="#94a3b8" tick={{ fontSize: 11, fill: '#94a3b8' }} />
+              <YAxis stroke="#94a3b8" tick={{ fontSize: 11, fill: '#94a3b8' }} unit="µg" />
               <Tooltip 
                 contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '0.75rem', fontSize: '12px' }}
                 itemStyle={{ color: '#f8fafc' }}
@@ -199,9 +203,9 @@ export const ImpactSimulator: React.FC<ImpactSimulatorProps> = ({ impact, airDat
       </div>
 
       <div className="bg-emerald-950/20 border border-emerald-900/50 rounded-2xl p-4 text-xs sm:text-sm text-emerald-200/90 leading-relaxed flex items-start gap-2.5">
-        <Sparkles className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+        <Sparkles className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <p>{impact.actionSummary}</p>
       </div>
-    </div>
+    </section>
   );
 };

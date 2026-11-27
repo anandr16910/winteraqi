@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Users, Baby, HeartPulse, Dog, Home, Car, Flame, Check } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { X, Users, Baby, HeartPulse, Dog, Home, Check } from 'lucide-react';
 import { HouseholdProfile } from '../types';
 
 interface HouseholdProfileModalProps {
@@ -17,6 +17,15 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
   onChangeProfile,
   onApply
 }) => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const update = (patch: Partial<HouseholdProfile>) => {
@@ -24,33 +33,40 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="household-profile-modal-title"
+    >
       <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div>
-            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-              <Users className="w-5 h-5 text-emerald-400" />
+            <h2 id="household-profile-modal-title" className="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <Users className="w-5 h-5 text-emerald-400" aria-hidden="true" />
               Household & Lifestyle Profile
-            </h3>
+            </h2>
             <p className="text-xs text-slate-400 mt-0.5">
               Gemini tunes indoor protection and emission-cutting actions directly to your living conditions.
             </p>
           </div>
           <button
+            type="button"
             onClick={onClose}
+            aria-label="Close household profile dialog"
             className="p-1.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 
         <div className="space-y-6 py-5">
           {/* Family members count */}
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">
+          <fieldset>
+            <legend className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">
               Number of Household Residents
-            </label>
+            </legend>
             <div className="flex items-center gap-3">
               {[1, 2, 3, 4, 5, '6+'].map((num, i) => {
                 const val = typeof num === 'number' ? num : 6;
@@ -59,6 +75,7 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                   <button
                     key={i}
                     type="button"
+                    aria-pressed={active}
                     onClick={() => update({ membersCount: val })}
                     className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition-all ${
                       active
@@ -71,13 +88,13 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                 );
               })}
             </div>
-          </div>
+          </fieldset>
 
           {/* Vulnerabilities checkboxes */}
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">
+          <fieldset>
+            <legend className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">
               Vulnerable Family Members (High Priority Protection)
-            </label>
+            </legend>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <label 
                 className={`flex items-start gap-3 p-3.5 rounded-2xl border cursor-pointer transition-all ${
@@ -94,7 +111,7 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                 />
                 <div>
                   <div className="text-sm font-medium flex items-center gap-1.5">
-                    <Baby className="w-4 h-4 text-emerald-400" />
+                    <Baby className="w-4 h-4 text-emerald-400" aria-hidden="true" />
                     Infants or Young Children
                   </div>
                   <p className="text-[11px] text-slate-400 mt-0.5">
@@ -118,7 +135,7 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                 />
                 <div>
                   <div className="text-sm font-medium flex items-center gap-1.5">
-                    <HeartPulse className="w-4 h-4 text-rose-400" />
+                    <HeartPulse className="w-4 h-4 text-rose-400" aria-hidden="true" />
                     Asthma or Bronchitis
                   </div>
                   <p className="text-[11px] text-slate-400 mt-0.5">
@@ -142,7 +159,7 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                 />
                 <div>
                   <div className="text-sm font-medium flex items-center gap-1.5">
-                    <Users className="w-4 h-4 text-cyan-400" />
+                    <Users className="w-4 h-4 text-cyan-400" aria-hidden="true" />
                     Elderly Members (65+)
                   </div>
                   <p className="text-[11px] text-slate-400 mt-0.5">
@@ -166,7 +183,7 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                 />
                 <div>
                   <div className="text-sm font-medium flex items-center gap-1.5">
-                    <Dog className="w-4 h-4 text-amber-400" />
+                    <Dog className="w-4 h-4 text-amber-400" aria-hidden="true" />
                     Indoor Dogs or Cats
                   </div>
                   <p className="text-[11px] text-slate-400 mt-0.5">
@@ -175,13 +192,13 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                 </div>
               </label>
             </div>
-          </div>
+          </fieldset>
 
           {/* Housing type */}
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">
+          <fieldset>
+            <legend className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">
               Dwelling Architecture
-            </label>
+            </legend>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
                 { key: 'apartment', label: 'Apartment / Condo', desc: 'Higher floor stacks have lower ground soot' },
@@ -191,6 +208,7 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                 <button
                   key={item.key}
                   type="button"
+                  aria-pressed={profile.homeType === item.key}
                   onClick={() => update({ homeType: item.key as any })}
                   className={`p-3 text-left rounded-2xl border transition-all ${
                     profile.homeType === item.key
@@ -199,20 +217,20 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                   }`}
                 >
                   <div className="text-sm font-semibold flex items-center gap-1.5">
-                    <Home className="w-3.5 h-3.5 text-emerald-400" />
+                    <Home className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
                     {item.label}
                   </div>
                   <p className="text-[11px] text-slate-400 mt-1">{item.desc}</p>
                 </button>
               ))}
             </div>
-          </div>
+          </fieldset>
 
           {/* Commute */}
-          <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">
+          <fieldset>
+            <legend className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 block">
               Primary Commute Routine
-            </label>
+            </legend>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               {[
                 { key: 'public_transit', label: 'Metro / Bus' },
@@ -223,6 +241,7 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                 <button
                   key={c.key}
                   type="button"
+                  aria-pressed={profile.commuteMode === c.key}
                   onClick={() => update({ commuteMode: c.key as any })}
                   className={`py-2.5 px-3 rounded-xl border text-xs font-medium transition-all ${
                     profile.commuteMode === c.key
@@ -234,7 +253,7 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
                 </button>
               ))}
             </div>
-          </div>
+          </fieldset>
         </div>
 
         {/* Footer */}
@@ -242,7 +261,7 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition-colors"
           >
             Cancel
           </button>
@@ -254,7 +273,7 @@ export const HouseholdProfileModal: React.FC<HouseholdProfileModalProps> = ({
             }}
             className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold text-xs flex items-center gap-2 shadow-lg shadow-emerald-950 transition-all"
           >
-            <Check className="w-4 h-4 stroke-[2.5]" />
+            <Check className="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
             Save Profile & Regenerate Plan
           </button>
         </div>

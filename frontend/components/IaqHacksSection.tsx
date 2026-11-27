@@ -84,16 +84,16 @@ export const IaqHacksSection: React.FC = () => {
   const [selectedHack, setSelectedHack] = useState<IaqHackItem>(IAQ_HACKS[0]);
 
   return (
-    <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl">
+    <section aria-labelledby="iaq-hacks-heading" className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-teal-950 text-teal-400 border border-teal-800/80">
+            <span className="p-2 rounded-xl bg-teal-950 text-teal-400 border border-teal-800/80" aria-hidden="true">
               <Sparkles className="w-4 h-4" />
             </span>
-            <h3 className="text-lg font-bold text-slate-100">
+            <h2 id="iaq-hacks-heading" className="text-lg font-bold text-slate-100">
               Indoor Air Quality (IAQ) Lab & Hacks
-            </h3>
+            </h2>
           </div>
           <p className="text-xs text-slate-400 mt-1">
             Affordable, peer-reviewed hacks to cut indoor PM2.5 by 80-95% without buying expensive appliances.
@@ -103,12 +103,14 @@ export const IaqHacksSection: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Hack selector list */}
-        <div className="lg:col-span-5 space-y-2.5">
+        <div role="group" aria-label="Select an indoor air quality blueprint" className="lg:col-span-5 space-y-2.5">
           {IAQ_HACKS.map((hack) => {
             const isSelected = selectedHack.id === hack.id;
             return (
               <button
                 key={hack.id}
+                type="button"
+                aria-pressed={isSelected}
                 onClick={() => setSelectedHack(hack)}
                 className={`w-full text-left p-4 rounded-2xl border transition-all flex items-center justify-between ${
                   isSelected
@@ -125,16 +127,16 @@ export const IaqHacksSection: React.FC = () => {
                       {hack.efficiencyRating}/10 Efficiency
                     </span>
                   </div>
-                  <h4 className="text-sm font-semibold text-slate-200 mt-1.5">
+                  <h3 className="text-sm font-semibold text-slate-200 mt-1.5">
                     {hack.title}
-                  </h4>
+                  </h3>
                   <div className="flex items-center gap-3 text-xs text-slate-400 mt-1">
                     <span>{hack.cost}</span>
-                    <span>•</span>
+                    <span aria-hidden="true">•</span>
                     <span>{hack.difficulty}</span>
                   </div>
                 </div>
-                <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${isSelected ? 'rotate-90 text-emerald-400' : ''}`} />
+                <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${isSelected ? 'rotate-90 text-emerald-400' : ''}`} aria-hidden="true" />
               </button>
             );
           })}
@@ -148,9 +150,9 @@ export const IaqHacksSection: React.FC = () => {
                 <span className="text-xs uppercase font-semibold text-emerald-400 tracking-wider">
                   Verified Blueprint
                 </span>
-                <h4 className="text-lg font-bold text-slate-100 mt-0.5">
+                <h3 className="text-lg font-bold text-slate-100 mt-0.5">
                   {selectedHack.title}
-                </h4>
+                </h3>
               </div>
               <div className="text-right">
                 <span className="text-2xl font-black text-emerald-400">
@@ -171,7 +173,7 @@ export const IaqHacksSection: React.FC = () => {
               </span>
               {selectedHack.stepByStep.map((step, idx) => (
                 <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-300 leading-normal">
-                  <span className="w-5 h-5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800/80 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">
+                  <span className="w-5 h-5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800/80 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5" aria-hidden="true">
                     {idx + 1}
                   </span>
                   <span>{step}</span>
@@ -182,13 +184,13 @@ export const IaqHacksSection: React.FC = () => {
             {/* Myth buster callout */}
             {selectedHack.mythBuster && (
               <div className="bg-amber-950/20 border border-amber-900/50 rounded-xl p-3 text-xs text-amber-200/90 flex items-start gap-2">
-                <HelpCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                <HelpCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                 <p className="leading-relaxed">{selectedHack.mythBuster}</p>
               </div>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

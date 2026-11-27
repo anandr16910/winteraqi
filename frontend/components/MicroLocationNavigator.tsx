@@ -87,17 +87,17 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
   };
 
   return (
-    <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl space-y-6">
+    <section aria-labelledby="microlocations-heading" className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/80">
+            <span className="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/80" aria-hidden="true">
               <Trees className="w-4 h-4" />
             </span>
-            <h3 className="text-lg font-bold text-slate-100">
+            <h2 id="microlocations-heading" className="text-lg font-bold text-slate-100">
               Hyper-Local Micro-AQI & Clean Air Sanctuaries
-            </h3>
+            </h2>
           </div>
           <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
             Smog is not uniform. Dense botanical gardens, city parks with tree canopies, and air-conditioned/filtered buildings provide significant micro-climate relief from ground-level thermal inversions.
@@ -105,22 +105,25 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center gap-2 self-start md:self-auto">
+        <div role="group" aria-label="Filter micro-locations" className="flex items-center gap-2 self-start md:self-auto">
           {[
-            { id: 'all', label: 'All Micro-Spots' },
-            { id: 'sanctuaries', label: '🌿 Clean Sanctuaries' },
-            { id: 'traps', label: '⚠️ Smog Traps' }
+            { id: 'all', icon: '', label: 'All Micro-Spots' },
+            { id: 'sanctuaries', icon: '🌿', label: 'Clean Sanctuaries' },
+            { id: 'traps', icon: '⚠️', label: 'Smog Traps' }
           ].map((tab) => (
             <button
               key={tab.id}
+              type="button"
+              aria-pressed={filter === tab.id}
               onClick={() => setFilter(tab.id as any)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1 ${
                 filter === tab.id
                   ? 'bg-emerald-600 text-slate-950 shadow-md shadow-emerald-950'
-                  : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700'
+                  : 'bg-slate-950 text-slate-300 hover:text-slate-100 border border-slate-800 hover:border-slate-700'
               }`}
             >
-              {tab.label}
+              {tab.icon && <span aria-hidden="true">{tab.icon}</span>}
+              <span>{tab.label}</span>
             </button>
           ))}
         </div>
@@ -128,8 +131,8 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
 
       {/* Micro Location Grid */}
       {isLoading ? (
-        <div className="py-12 text-center">
-          <Compass className="w-8 h-8 text-emerald-400 animate-spin mx-auto mb-2" />
+        <div className="py-12 text-center" role="status" aria-live="polite">
+          <Compass className="w-8 h-8 text-emerald-400 animate-spin motion-reduce:animate-none mx-auto mb-2" aria-hidden="true" />
           <p className="text-sm font-medium text-slate-300">
             Mapping micro-climates, vegetation buffers & building HVAC in {cityAir.city}...
           </p>
@@ -150,7 +153,7 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
                 <div>
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <span className="flex items-center gap-1.5 text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-900 text-slate-300 border border-slate-800">
-                      {getCategoryIcon(loc.category)}
+                      <span aria-hidden="true">{getCategoryIcon(loc.category)}</span>
                       {loc.categoryLabel}
                     </span>
                     <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${getRatingBadge(loc.cleanAirRating)}`}>
@@ -158,9 +161,9 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
                     </span>
                   </div>
 
-                  <h4 className="text-sm sm:text-base font-bold text-slate-100 line-clamp-1">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-100 line-clamp-1">
                     {loc.name}
-                  </h4>
+                  </h3>
 
                   {/* Micro AQI comparison */}
                   <div className="flex items-baseline gap-3 my-3 pb-3 border-b border-slate-900">
@@ -174,16 +177,16 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
                     <div className="flex items-center gap-1 text-xs font-bold">
                       {isCleaner ? (
                         <span className="text-emerald-400 flex items-center">
-                          <ArrowDownRight className="w-4 h-4 stroke-[2.5]" />
+                          <ArrowDownRight className="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
                           {Math.abs(loc.deltaPercent)}% Cleaner
                         </span>
                       ) : (
                         <span className="text-rose-400 flex items-center">
-                          <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
+                          <ArrowUpRight className="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
                           +{loc.deltaPercent}% Dirtier
                         </span>
                       )}
-                      <span className="text-[10px] text-slate-500 font-normal">vs city avg ({cityAir.aqi})</span>
+                      <span className="text-[10px] text-slate-400 font-normal">vs city avg ({cityAir.aqi})</span>
                     </div>
                   </div>
 
@@ -194,7 +197,7 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
 
                 <div className="pt-2 border-t border-slate-900 flex items-center justify-between text-[11px] text-slate-400">
                   <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-slate-500" />
+                    <Clock className="w-3 h-3 text-slate-400" aria-hidden="true" />
                     {loc.recommendedBestTime}
                   </span>
                   <span className="font-medium text-slate-300">
@@ -213,12 +216,12 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
             <div>
               <span className="text-xs uppercase font-bold text-emerald-400 tracking-wider flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
                 Custom Spot Micro-AQI Checker
               </span>
-              <h4 className="text-sm sm:text-base font-bold text-slate-100 mt-0.5">
+              <h3 className="text-sm sm:text-base font-bold text-slate-100 mt-0.5">
                 Test any building, school courtyard, local garden, or floor level in {cityAir.city}
-              </h4>
+              </h3>
               <p className="text-xs text-slate-400 mt-0.5">
                 Gemini uses building aerodynamics, tree coverage density, and inversion stratification to estimate local air quality.
               </p>
@@ -227,13 +230,17 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
 
           <form onSubmit={handleCustomCheck} className="flex items-center gap-2">
             <div className="relative flex-1">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <label htmlFor="custom-spot-input" className="sr-only">
+                Enter a building, school courtyard, garden, or floor level in {cityAir.city}
+              </label>
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
               <input
+                id="custom-spot-input"
                 type="text"
                 value={customInput}
                 onChange={(e) => setCustomInput(e.target.value)}
                 placeholder="e.g. 'City Botanical Greenhouse', '18th floor balcony', 'Subway underground station', 'St. Mary School campus'..."
-                className="w-full bg-slate-900 border border-slate-700 text-slate-100 placeholder:text-slate-500 rounded-xl pl-9 pr-3 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                className="w-full bg-slate-900 border border-slate-700 text-slate-100 placeholder:text-slate-400 rounded-xl pl-9 pr-3 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
               />
             </div>
             <button
@@ -245,7 +252,7 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
                 <span>Evaluating...</span>
               ) : (
                 <>
-                  <Compass className="w-4 h-4 stroke-[2.5]" />
+                  <Compass className="w-4 h-4 stroke-[2.5]" aria-hidden="true" />
                   <span>Check Spot</span>
                 </>
               )}
@@ -254,15 +261,15 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
 
           {/* Custom Evaluation Result Card */}
           {customEvaluation && (
-            <div className="mt-4 p-4 rounded-xl bg-emerald-950/20 border border-emerald-800/60 text-slate-200 animate-in fade-in duration-300">
+            <div aria-live="polite" className="mt-4 p-4 rounded-xl bg-emerald-950/20 border border-emerald-800/60 text-slate-200 animate-in fade-in duration-300">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-emerald-900/40">
                 <div>
                   <span className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">
                     Micro-Climate Assessment
                   </span>
-                  <h5 className="text-base font-bold text-slate-100">
+                  <h4 className="text-base font-bold text-slate-100">
                     {customEvaluation.spotName}
-                  </h5>
+                  </h4>
                 </div>
                 <div className="flex items-center gap-3">
                   <div>
@@ -295,6 +302,6 @@ export const MicroLocationNavigator: React.FC<MicroLocationNavigatorProps> = ({
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };

@@ -277,17 +277,20 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
   const activePurifier = PURIFIER_OPTIONS.find((p) => p.id === selectedPurifierId);
 
   return (
-    <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl space-y-6">
+    <section
+      aria-labelledby="cadr-sizer-heading"
+      className="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl space-y-6"
+    >
       {/* Header Banner */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-800">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/80">
+            <span className="p-2 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/80" aria-hidden="true">
               <Wind className="w-5 h-5 stroke-[2.5]" />
             </span>
-            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+            <h2 id="cadr-sizer-heading" className="text-lg font-bold text-slate-100 flex items-center gap-2">
               Room-by-Room CADR & Air Scrub Sizer
-            </h3>
+            </h2>
             <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
               ASHRAE & EPA Aligned
             </span>
@@ -298,23 +301,31 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
         </div>
 
         {/* Unit System Toggle */}
-        <div className="flex items-center gap-2 self-start lg:self-auto bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+        <div
+          role="group"
+          aria-label="Measurement unit system"
+          className="flex items-center gap-2 self-start lg:self-auto bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold"
+        >
           <button
+            type="button"
+            aria-pressed={unitSystem === 'imperial'}
             onClick={() => setUnitSystem('imperial')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               unitSystem === 'imperial'
                 ? 'bg-emerald-600 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-300 hover:text-slate-100'
             }`}
           >
             Feet / CFM (Imperial)
           </button>
           <button
+            type="button"
+            aria-pressed={unitSystem === 'metric'}
             onClick={() => setUnitSystem('metric')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               unitSystem === 'metric'
                 ? 'bg-emerald-600 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-300 hover:text-slate-100'
             }`}
           >
             Meters / m³ (Metric)
@@ -323,28 +334,30 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
       </div>
 
       {/* Room Preset Selector */}
-      <div>
-        <label className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5 block flex items-center justify-between">
-          <span>Step 1: Choose Room Archetype</span>
+      <div role="group" aria-labelledby="cadr-step1-label">
+        <div className="w-full text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5 flex items-center justify-between">
+          <span id="cadr-step1-label">Step 1: Choose Room Archetype</span>
           <span className="text-emerald-400 normal-case font-normal text-xs">
             Target: {activePreset?.targetAch || 5.0} ACH minimum during winter inversion
           </span>
-        </label>
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
           {ROOM_PRESETS.map((preset) => {
             const isSelected = selectedRoomId === preset.id;
             const getIcon = () => {
               switch (preset.id) {
-                case 'nursery': return <Baby className="w-4 h-4" />;
-                case 'bedroom': return <Bed className="w-4 h-4" />;
-                case 'living': return <Armchair className="w-4 h-4" />;
-                case 'office': return <Laptop className="w-4 h-4" />;
-                case 'kitchen': return <CookingPot className="w-4 h-4" />;
+                case 'nursery': return <Baby className="w-4 h-4" aria-hidden="true" />;
+                case 'bedroom': return <Bed className="w-4 h-4" aria-hidden="true" />;
+                case 'living': return <Armchair className="w-4 h-4" aria-hidden="true" />;
+                case 'office': return <Laptop className="w-4 h-4" aria-hidden="true" />;
+                case 'kitchen': return <CookingPot className="w-4 h-4" aria-hidden="true" />;
               }
             };
             return (
               <button
                 key={preset.id}
+                type="button"
+                aria-pressed={isSelected}
                 onClick={() => handleRoomPresetChange(preset.id)}
                 className={`p-3 rounded-2xl border text-left transition-all flex flex-col justify-between ${
                   isSelected
@@ -367,8 +380,8 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
           })}
         </div>
         {activePreset && (
-          <p className="text-xs text-slate-400 mt-2 flex items-center gap-1.5 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
-            <ShieldCheck className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+          <p className="text-xs text-slate-300 mt-2 flex items-center gap-1.5 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+            <ShieldCheck className="w-4 h-4 text-emerald-400 flex-shrink-0" aria-hidden="true" />
             <span>{activePreset.priorityNote}</span>
           </p>
         )}
@@ -379,12 +392,13 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
         {/* Length */}
         <div>
           <div className="flex items-center justify-between text-xs font-semibold text-slate-300 mb-1.5">
-            <span>Room Length</span>
+            <label htmlFor="cadr-room-length">Room Length</label>
             <span className="text-emerald-400 font-mono">
               {unitSystem === 'imperial' ? `${lengthFt} ft` : `${toMetricMeters(lengthFt)} m`}
             </span>
           </div>
           <input
+            id="cadr-room-length"
             type="range"
             min={8}
             max={35}
@@ -393,7 +407,7 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
             onChange={(e) => setLengthFt(parseFloat(e.target.value))}
             className="w-full accent-emerald-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
           />
-          <div className="flex justify-between text-[10px] text-slate-400 mt-1">
+          <div className="flex justify-between text-[10px] text-slate-400 mt-1" aria-hidden="true">
             <span>8 ft (2.4m)</span>
             <span>35 ft (10.6m)</span>
           </div>
@@ -402,12 +416,13 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
         {/* Width */}
         <div>
           <div className="flex items-center justify-between text-xs font-semibold text-slate-300 mb-1.5">
-            <span>Room Width</span>
+            <label htmlFor="cadr-room-width">Room Width</label>
             <span className="text-emerald-400 font-mono">
               {unitSystem === 'imperial' ? `${widthFt} ft` : `${toMetricMeters(widthFt)} m`}
             </span>
           </div>
           <input
+            id="cadr-room-width"
             type="range"
             min={8}
             max={30}
@@ -416,7 +431,7 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
             onChange={(e) => setWidthFt(parseFloat(e.target.value))}
             className="w-full accent-emerald-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
           />
-          <div className="flex justify-between text-[10px] text-slate-400 mt-1">
+          <div className="flex justify-between text-[10px] text-slate-400 mt-1" aria-hidden="true">
             <span>8 ft (2.4m)</span>
             <span>30 ft (9.1m)</span>
           </div>
@@ -425,12 +440,13 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
         {/* Ceiling Height */}
         <div>
           <div className="flex items-center justify-between text-xs font-semibold text-slate-300 mb-1.5">
-            <span>Ceiling Height</span>
+            <label htmlFor="cadr-ceiling-height">Ceiling Height</label>
             <span className="text-teal-400 font-mono">
               {unitSystem === 'imperial' ? `${ceilingFt} ft` : `${toMetricMeters(ceilingFt)} m`}
             </span>
           </div>
           <input
+            id="cadr-ceiling-height"
             type="range"
             min={7.5}
             max={14}
@@ -439,7 +455,7 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
             onChange={(e) => setCeilingFt(parseFloat(e.target.value))}
             className="w-full accent-teal-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
           />
-          <div className="flex justify-between text-[10px] text-slate-400 mt-1">
+          <div className="flex justify-between text-[10px] text-slate-400 mt-1" aria-hidden="true">
             <span>Standard (8 ft)</span>
             <span>Loft / Cathedral (14 ft)</span>
           </div>
@@ -467,10 +483,11 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
           </div>
 
           <div className="mt-2">
-            <span className="text-[11px] font-semibold text-slate-400 block mb-1">
+            <label htmlFor="cadr-room-draftiness" className="text-[11px] font-semibold text-slate-300 block mb-1">
               Room Draftiness
-            </span>
+            </label>
             <select
+              id="cadr-room-draftiness"
               value={roomSealing}
               onChange={(e) => setRoomSealing(e.target.value as any)}
               className="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-emerald-500"
@@ -484,22 +501,28 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
       </div>
 
       {/* Step 2: Purifier Selection */}
-      <div>
-        <div className="flex items-center justify-between mb-2.5">
-          <label className="text-xs font-semibold uppercase tracking-wider text-slate-400 block">
+      <div role="group" aria-labelledby="cadr-step2-label">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+          <span id="cadr-step2-label" className="text-xs font-semibold uppercase tracking-wider text-slate-400 block">
             Step 2: Select Purifier Device or DIY Box-Fan Build
-          </label>
+          </span>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400">Units deployed in this room:</span>
-            <div className="flex items-center gap-1 bg-slate-950 border border-slate-800 rounded-xl px-2 py-0.5">
+            <span id="cadr-units-label" className="text-xs text-slate-400">Units deployed in this room:</span>
+            <div
+              role="group"
+              aria-labelledby="cadr-units-label"
+              className="flex items-center gap-1 bg-slate-950 border border-slate-800 rounded-xl px-2 py-0.5"
+            >
               {[1, 2, 3].map((num) => (
                 <button
                   key={num}
+                  type="button"
+                  aria-pressed={purifierCount === num}
                   onClick={() => setPurifierCount(num)}
                   className={`px-2 py-0.5 rounded-lg text-xs font-bold transition-all ${
                     purifierCount === num
                       ? 'bg-emerald-600 text-slate-950'
-                      : 'text-slate-400 hover:text-slate-200'
+                      : 'text-slate-300 hover:text-slate-100'
                   }`}
                 >
                   {num}x
@@ -515,6 +538,8 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
             return (
               <button
                 key={purifier.id}
+                type="button"
+                aria-pressed={isSelected}
                 onClick={() => setSelectedPurifierId(purifier.id)}
                 className={`p-4 rounded-2xl border text-left transition-all flex flex-col justify-between ${
                   isSelected
@@ -525,16 +550,17 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-1.5">
                     <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900 text-teal-300 border border-slate-800">
-                      {purifier.category === 'diy_box_fan' ? '🛠️ DIY Build' : '📦 Commercial'}
+                      <span aria-hidden="true">{purifier.category === 'diy_box_fan' ? '🛠️ ' : '📦 '}</span>
+                      {purifier.category === 'diy_box_fan' ? 'DIY Build' : 'Commercial'}
                     </span>
                     <span className="text-xs font-black text-emerald-400">
                       {purifier.cadrCfm * purifierCount} CFM
                     </span>
                   </div>
 
-                  <h4 className="text-sm font-bold text-slate-100 leading-snug">
+                  <h3 className="text-sm font-bold text-slate-100 leading-snug">
                     {purifier.name}
-                  </h4>
+                  </h3>
                   <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
                     {purifier.description}
                   </p>
@@ -542,11 +568,11 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
 
                 <div className="mt-3 pt-2.5 border-t border-slate-900/80 flex items-center justify-between text-[11px] text-slate-400">
                   <span className="flex items-center gap-1">
-                    <Volume2 className="w-3.5 h-3.5 text-slate-500" />
+                    <Volume2 className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
                     {purifier.noiseDba}
                   </span>
                   <span className="flex items-center gap-1 text-slate-300 font-semibold">
-                    <DollarSign className="w-3 h-3 text-emerald-400" />
+                    <DollarSign className="w-3 h-3 text-emerald-400" aria-hidden="true" />
                     {purifier.costEstimate}
                   </span>
                 </div>
@@ -567,19 +593,19 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
             <span className="text-xs uppercase font-bold tracking-wider text-emerald-400">
               Sizing Diagnosis for {activePreset?.name}
             </span>
-            <h4 className="text-xl sm:text-2xl font-black text-slate-100 mt-0.5 flex items-center gap-2">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-100 mt-0.5 flex items-center gap-2">
               {calculation.isAdequate ? (
                 <>
-                  <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                  <CheckCircle2 className="w-6 h-6 text-emerald-400" aria-hidden="true" />
                   <span>{calculation.verdict}</span>
                 </>
               ) : (
                 <>
-                  <AlertTriangle className="w-6 h-6 text-amber-400" />
+                  <AlertTriangle className="w-6 h-6 text-amber-400" aria-hidden="true" />
                   <span>{calculation.verdict}</span>
                 </>
               )}
-            </h4>
+            </h3>
           </div>
 
           <div className="flex items-center gap-3">
@@ -616,27 +642,31 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
         <div className="mt-5 pt-4 border-t border-slate-800/80">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
             <div>
-              <h5 className="text-sm font-bold text-slate-200 flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-emerald-400" />
+              <h4 className="text-sm font-bold text-slate-200 flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-emerald-400" aria-hidden="true" />
                 Air Scrubbing Curve: Micro-Particulate Clearance Over Time
-              </h5>
+              </h4>
               <p className="text-xs text-slate-400">
                 Starting from current {currentCityAir.city} outdoor smog level ({currentCityAir.pm25} µg/m³ PM2.5) down to WHO safe baseline.
               </p>
             </div>
             <div className="flex items-center gap-3 text-xs">
               <span className="flex items-center gap-1 text-emerald-400">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true" />
                 Room PM2.5 Concentration
               </span>
               <span className="flex items-center gap-1 text-teal-300">
-                <span className="w-2.5 h-0.5 bg-teal-400" />
+                <span className="w-2.5 h-0.5 bg-teal-400" aria-hidden="true" />
                 WHO Safe Limit (15 µg/m³)
               </span>
             </div>
           </div>
 
-          <div className="h-60 w-full">
+          <div
+            className="h-60 w-full"
+            role="img"
+            aria-label={`Air scrubbing curve showing indoor PM2.5 decaying from ${currentCityAir.pm25} micrograms per cubic meter toward the WHO safe limit of 15 in approximately ${calculation.minutesToSafeLevel} minutes.`}
+          >
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={calculation.decayTimeline} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
@@ -646,8 +676,8 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                <XAxis dataKey="minute" stroke="#64748b" tick={{ fontSize: 11 }} unit="m" />
-                <YAxis stroke="#64748b" tick={{ fontSize: 11 }} unit="µg" />
+                <XAxis dataKey="minute" stroke="#94a3b8" tick={{ fontSize: 11, fill: '#94a3b8' }} unit="m" />
+                <YAxis stroke="#94a3b8" tick={{ fontSize: 11, fill: '#94a3b8' }} unit="µg" />
                 <Tooltip
                   contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '0.75rem', fontSize: '12px' }}
                   itemStyle={{ color: '#f8fafc' }}
@@ -671,7 +701,7 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
         {/* Quick Sizing Rules of Thumb */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 pt-3 border-t border-slate-800/80 text-xs text-slate-300">
           <div className="flex items-start gap-2 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-            <Sparkles className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+            <Sparkles className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <span className="font-semibold text-slate-100 block">The 2/3 CADR Rule</span>
               <span>Your smoke CADR in CFM should be at least 2/3 of your room floor area in square feet for standard 8 ft ceilings.</span>
@@ -679,7 +709,7 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
           </div>
 
           <div className="flex items-start gap-2 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-            <ShieldCheck className="w-4 h-4 text-teal-400 flex-shrink-0 mt-0.5" />
+            <ShieldCheck className="w-4 h-4 text-teal-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <span className="font-semibold text-slate-100 block">High Ceiling Penalty</span>
               <span>Rooms with 10–12 ft ceilings hold 25–50% more air volume and require proportionally higher fan CFM to achieve 5 ACH.</span>
@@ -687,7 +717,7 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
           </div>
 
           <div className="flex items-start gap-2 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-            <Layers className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
+            <Layers className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <span className="font-semibold text-slate-100 block">Why CR Boxes Excel</span>
               <span>A single $60 Corsi-Rosenthal box produces ~550 CFM, satisfying living rooms up to 600 sq ft that would require three commercial units.</span>
@@ -695,6 +725,6 @@ export const CadrSizingCalculator: React.FC<CadrSizingCalculatorProps> = ({ curr
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
